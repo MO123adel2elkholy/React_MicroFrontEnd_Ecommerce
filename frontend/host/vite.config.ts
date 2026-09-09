@@ -8,4 +8,13 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+   server: {
+    port: 3000, // keep this stable
+
+    // if 3000 is busy, fail instead of jumping to 3001/3002
+    strictPort: true,
+
+    origin: "http://localhost:3000",
+  },
+
 })

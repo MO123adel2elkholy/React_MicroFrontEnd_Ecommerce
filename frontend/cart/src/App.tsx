@@ -21,7 +21,12 @@ type CartItem = {
    { id: "p8", name: "speaker ", price: 150 , "quantity" : 7 }
 ];
 function App() {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(itemsx);
+  const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
 
 
  
@@ -49,7 +54,7 @@ function App() {
         <section className="panel">
           <div className="panel-top">
             <h2>Your cart</h2>
-            <span className="badge">Items: {itemsx.length}</span>
+            <span className="badge">Items: {items.length}</span>
           </div>
 
           {itemsx.length === 0 ? (
@@ -72,7 +77,7 @@ function App() {
 
           {items.length > 0 ? (
             <div className="footer">
-              <strong>Total: ${100}</strong>
+              <strong>Total: ${totalCount}</strong>
               <button type="button" className="secondary" onClick={clearCart}>
                 Clear cart
               </button>
