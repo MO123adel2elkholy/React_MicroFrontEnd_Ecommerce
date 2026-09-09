@@ -1,19 +1,37 @@
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import babel from '@rolldown/plugin-babel'
-import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
+import babel from '@rolldown/plugin-babel'
+import { defineConfig } from "vite";
+import { federation } from "@module-federation/vite";
+
+// module federation plugin for vite is going to help the app
+// so that it can expose the modules at runtime
+// via remoteentry.js
+
 export default defineConfig({
   plugins: [
+    federation({
+      name: "products", // unique remote name
+      filename: "remoteEntry.js",
+      exposes: {
+        "./ProductList": "./src/App.tsx",
+      },
+     
+      dts: false,
+    }),
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
-   server: {
-    port: 3001, // keep this stable
+  base: "http://localhost:3001/",
 
-    // if 3000 is busy, fail instead of jumping to 3001/3002
+  server: {
+    port: 3001,
+
     strictPort: true,
 
     origin: "http://localhost:3001",
   },
-})
+  build: {
+    target: "chrome89",
+  },
+});
