@@ -16,7 +16,7 @@ microfrontend is an architectural style where independently deliverable frontend
 
 5- split by business domain or domain boundary 
 
-
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
 # microfrontend Architecture
 1- Client-side Composition: In this approach, the microfrontends are loaded and composed on the client-side, typically using JavaScript frameworks like React, Angular, or Vue.js. Each microfrontend is responsible for rendering its own UI and handling its own state.
