@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { addProductToCart } from "@microshop/cart-contract";
 
 type Product = {
   id: string;
@@ -14,14 +15,13 @@ const PRODUCTS: Product[] = [
   { id: "p4", name: "Monitor Stand", price: 39 },
   { id: "p5", name: "Webcam HD", price: 59 },
   { id: "p6", name: "Desk Lamp", price: 34 },
-  { id: "p7", name: "HeadPhone", price: 100 },
-   { id: "p8", name: "speaker ", price: 150 }
 ];
 
 function App() {
   const [message, setMessage] = useState("");
 
   const addToCart = (product: Product) => {
+    addProductToCart(product);
     setMessage(`Added "${product.name}"`);
   };
 

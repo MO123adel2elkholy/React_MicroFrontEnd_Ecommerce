@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
+import {
+  CART_ADD_EVENT,
+  readCartItems,
+  writeCartItems,
+} from "@microshop/cart-contract";
 
 type CartItem = {
   id: string;
@@ -9,35 +13,30 @@ type CartItem = {
   quantity: number;
 };
 
-
- const itemsx: CartItem[] = [
-  { id: "p1", name: "Wireless Mouse", price: 29 , quantity: 1 },
-  { id: "p2", name: "Mechanical Keyboard", price: 89 , quantity: 2},
-  { id: "p3", name: "USB-C Hub", price: 45 , quantity: 3 },
-  { id: "p4", name: "Monitor Stand", price: 39 , quantity: 4},
-  { id: "p5", name: "Webcam HD", price: 59 , quantity: 5},
-  { id: "p6", name: "Desk Lamp", price: 34 , quantity: 1 },
-  { id: "p7", name: "HeadPhone", price: 100  , "quantity" : 6},
-   { id: "p8", name: "speaker ", price: 150 , "quantity" : 7 }
-];
 function App() {
-  const [items, setItems] = useState<CartItem[]>(itemsx);
+  const [items, setItems] = useState<CartItem[]>(() => readCartItems());
+
+  useEffect(() => {
+    const onAdd = () => setItems(readCartItems());
+
+    window.addEventListener(CART_ADD_EVENT, onAdd);
+    return () => window.removeEventListener(CART_ADD_EVENT, onAdd);
+  }, []);
+
   const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
-
- 
-
   const removeItem = (id: string) => {
-    const next = itemsx.filter((item) => item.id !== id);
-
+    const next = items.filter((item) => item.id !== id);
+    writeCartItems(next);
     setItems(next);
   };
 
   const clearCart = () => {
+    writeCartItems([]);
     setItems([]);
   };
 
@@ -54,14 +53,14 @@ function App() {
         <section className="panel">
           <div className="panel-top">
             <h2>Your cart</h2>
-            <span className="badge">Items: {items.length}</span>
+            <span className="badge">Items: {totalCount}</span>
           </div>
 
-          {itemsx.length === 0 ? (
+          {items.length === 0 ? (
             <p className="empty">Cart is empty. Add a product from Products.</p>
           ) : (
             <ul className="list">
-              {itemsx.map((item) => (
+              {items.map((item) => (
                 <li key={item.id} className="row">
                   <span>
                     {item.name} × {item.quantity} — $
@@ -77,7 +76,7 @@ function App() {
 
           {items.length > 0 ? (
             <div className="footer">
-              <strong>Total: ${totalCount}</strong>
+              <strong>Total: ${totalPrice}</strong>
               <button type="button" className="secondary" onClick={clearCart}>
                 Clear cart
               </button>
