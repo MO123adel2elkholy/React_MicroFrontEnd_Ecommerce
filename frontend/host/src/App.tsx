@@ -4,7 +4,8 @@ import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 
 type Page = "home" | "products" | "cart";
 
-
+const ProductList = lazy(() => import("products/ProductList"));
+const Cart = lazy(() => import("cart/Cart"));
 
 function App() {
   const [page, setPage] = useState<Page>("home");
@@ -63,7 +64,7 @@ function App() {
                     <p className="loading">Loading products remote...</p>
                   }
                 >
-                  
+                  <ProductList />
                 </Suspense>
               }
             />
@@ -73,7 +74,7 @@ function App() {
                 <Suspense
                   fallback={<p className="loading">Loading cart remote...</p>}
                 >
-                 
+                  <Cart />
                 </Suspense>
               }
             />

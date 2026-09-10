@@ -16,6 +16,19 @@ export default defineConfig({
       exposes: {
         "./Cart": "./src/App.tsx",
       },
+       shared: {
+        react: {
+          singleton: true, // only one react instance in the browser
+          requiredVersion: "^19.2.8",
+        },
+        "react/": {
+          singleton: true, // subpaths imports like -> 'react/jsx-rumtime
+        },
+        "react-dom": {
+          singleton: true,
+          requiredVersion: "^19.2.8",
+        },
+      },
      
       dts: false,
     }),
